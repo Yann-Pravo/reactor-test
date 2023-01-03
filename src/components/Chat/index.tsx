@@ -25,7 +25,7 @@ const Chat: React.FC<ChatProps> = ({
   user,
   changeUser,
 }) => (
-  <div className="w-full max-w-sm px-4 mt-8">
+  <div className="px-4 mt-8">
     <Popover className="relative">
       {() => (
         <>
