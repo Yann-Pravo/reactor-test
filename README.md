@@ -30,6 +30,12 @@ You see the number of comments on the chat icon
 
 
 
+# Some things left to do
+- Add tests
+- More typing with Typescript
+- ...
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
