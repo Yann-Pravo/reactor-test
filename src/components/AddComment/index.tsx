@@ -4,6 +4,7 @@ import { t } from "i18next";
 import { moods } from "../Chat/helpers";
 import Comment from "../../types/comment";
 import { useFormik } from "formik";
+import { addCommentSchema } from "./helpers";
 
 interface AddCommentProps {
   onPost: (comment: Comment) => void;
@@ -21,9 +22,12 @@ const AddComment: React.FC<AddCommentProps> = ({
     handleChange,
     setFieldValue,
     resetForm,
+    isValid,
     values: { mood, text },
   } = useFormik({
     enableReinitialize: true,
+    validationSchema: addCommentSchema,
+    isInitialValid: false,
     initialValues: {
       mood: "",
       text: "",
@@ -87,7 +91,14 @@ const AddComment: React.FC<AddCommentProps> = ({
               <div className="flex-shrink-0">
                 <button
                   type="submit"
-                  className="inline-flex items-center rounded-md border border-transparent bg-[#00e0b7] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#805afe] focus:outline-none focus:ring-2 focus:ring-[#00e0b7] focus:ring-offset-2"
+                  disabled={!isValid}
+                  className={classNames(
+                    "inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-[#00e0b7] focus:ring-offset-2",
+                    {
+                      "bg-gray-400": !isValid,
+                      "bg-[#00e0b7] hover:bg-[#805afe]": isValid,
+                    }
+                  )}
                 >
                   {t("post")}
                 </button>
