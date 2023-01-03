@@ -1,49 +1,68 @@
-import { useState } from "react";
-import {
-  UserCircleIcon,
-  HandThumbDownIcon,
-  HandThumbUpIcon,
-  HeartIcon,
-} from "@heroicons/react/20/solid";
+import { UserCircleIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
 import { t } from "i18next";
+import { moods } from "../Chat/helpers";
+import Comment from "../../types/comment";
+import { useFormik } from "formik";
 
-const moods = [
-  {
-    value: "love",
-    icon: HeartIcon,
-    bgColor: "bg-pink-400",
-  },
-  {
-    value: "thumbs-up",
-    icon: HandThumbUpIcon,
-    bgColor: "bg-blue-500",
-  },
-  {
-    value: "thumbs-down",
-    icon: HandThumbDownIcon,
-    bgColor: "bg-red-500",
-  },
-];
+interface AddCommentProps {
+  onPost: (comment: Comment) => void;
+  user: string;
+  changeUser: () => void;
+}
 
-const Comment: React.FC = () => {
-  const [selected, setSelected] = useState("");
+const AddComment: React.FC<AddCommentProps> = ({
+  onPost,
+  user,
+  changeUser,
+}) => {
+  const {
+    handleSubmit,
+    handleChange,
+    setFieldValue,
+    resetForm,
+    values: { mood, text },
+  } = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      mood: "",
+      text: "",
+      user,
+    },
+    onSubmit: () => {
+      const date = new Date();
+
+      onPost({
+        id: String(date.getTime()),
+        date,
+        reaction: mood,
+        value: text,
+        user,
+      });
+
+      resetForm();
+    },
+  });
 
   return (
     <div className="flex items-start space-x-4">
-      <div className="p-1 bg-red-500 rounded-xl">
+      <div
+        className={classNames("p-1 rounded-xl cursor-pointer", user)}
+        onClick={changeUser}
+      >
         <UserCircleIcon className="h-8 w-8 text-white" />
       </div>
       <div className="min-w-0 flex-1">
-        <form action="#" className="relative">
+        <form onSubmit={handleSubmit} className="relative">
           <div className="overflow-hidden rounded-lg border border-gray-300 shadow-sm focus-within:border-[#00e0b7] focus-within:ring-1 focus-within:ring-[#00e0b7]">
             <textarea
               rows={3}
-              name="comment"
-              id="comment"
+              name="text"
+              id="text"
+              onChange={handleChange}
               className="block w-full resize-none border-0 py-3 focus:ring-0 sm:text-sm"
               placeholder={t("add-your-comment") || ""}
-              defaultValue={""}
+              value={text}
             />
 
             <div className="flex justify-between py-2 pl-3 pr-2 bg-slate-200">
@@ -52,9 +71,9 @@ const Comment: React.FC = () => {
                   <button
                     key={value}
                     type="button"
-                    onClick={() => setSelected(value)}
+                    onClick={() => setFieldValue("mood", value)}
                     className={classNames(
-                      selected === value ? bgColor : "bg-gray-500",
+                      mood === value ? bgColor : "bg-gray-500",
                       "w-8 h-8 rounded-full flex items-center justify-center"
                     )}
                   >
@@ -81,4 +100,4 @@ const Comment: React.FC = () => {
   );
 };
 
-export default Comment;
+export default AddComment;

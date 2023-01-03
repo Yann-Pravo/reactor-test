@@ -1,164 +1,114 @@
 import { Popover, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import Comment from "../Comment";
+import AddComment from "../AddComment";
+import Comment from "../../types/comment";
+import { formatDate, getMoodIcon } from "./helpers";
+import classNames from "classnames";
+import {
+  MinusCircleIcon,
+  UserCircleIcon,
+  ChatBubbleOvalLeftIcon,
+} from "@heroicons/react/20/solid";
 
-const solutions = [
-  {
-    name: "Insights",
-    description: "Measure actions your users take",
-    href: "##",
-    icon: IconOne,
-  },
-  {
-    name: "Automations",
-    description: "Create your own targeted content",
-    href: "##",
-    icon: IconTwo,
-  },
-  {
-    name: "Reports",
-    description: "Keep track of your growth",
-    href: "##",
-    icon: IconThree,
-  },
-];
+interface ChatProps {
+  comments: Comment[];
+  addComment: (comment: Comment) => void;
+  removeComment: (commentId: string) => void;
+  user: string;
+  changeUser: () => void;
+}
 
-export default function Example() {
-  return (
-    <div className="w-full max-w-sm px-4 mt-8">
-      <Popover className="relative">
-        {({ open }) => (
-          <>
-            <Popover.Button
-              className={`
-                ${open ? "" : "text-opacity-90"}
-                group inline-flex items-center rounded-md bg-black px-1 py-1 text-base font-medium text-white hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
-            >
-              <img
-                alt="logo"
-                src="https://crew3.xyz/static/media/Logo.f74e4f5722fd8940ce54d23f32f2067d.svg"
-              />
-            </Popover.Button>
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-200"
-              enterFrom="opacity-0 translate-y-1"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-1"
-            >
-              <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
-                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                  <div className="relative grid gap-8 bg-white p-7 lg:grid-cols-2">
-                    {solutions.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+const Chat: React.FC<ChatProps> = ({
+  comments,
+  addComment,
+  removeComment,
+  user,
+  changeUser,
+}) => (
+  <div className="w-full max-w-sm px-4 mt-8">
+    <Popover className="relative">
+      {() => (
+        <>
+          <Popover.Button className="relative rounded-md bg-black px-1 py-1 text-base font-medium text-white hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 text-opacity-90">
+            <div className="absolute flex top-1 right-1">
+              {comments.length > 0 && (
+                <div className="bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+                  {comments.length}
+                </div>
+              )}
+            </div>
+            <ChatBubbleOvalLeftIcon className="h-10 w-10" />
+          </Popover.Button>
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-200"
+            enterFrom="opacity-0 translate-y-1"
+            enterTo="opacity-100 translate-y-0"
+            leave="transition ease-in duration-150"
+            leaveFrom="opacity-100 translate-y-0"
+            leaveTo="opacity-0 translate-y-1"
+          >
+            <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
+              <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                <div className="relative bg-white p-7 space-y-2">
+                  {comments.map(({ id, date, value, reaction, user }) => {
+                    const mood = getMoodIcon(reaction);
+                    const MoodIcon = mood?.icon;
+
+                    return (
+                      <div
+                        key={id}
+                        className="group -m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                       >
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center text-white sm:h-12 sm:w-12">
-                          <item.icon aria-hidden="true" />
+                        <div className={classNames("p-1 rounded-xl", user)}>
+                          <UserCircleIcon className="h-8 w-8 text-white" />
                         </div>
                         <div className="ml-4">
-                          <p className="text-sm font-medium text-gray-900">
-                            {item.name}
+                          <p className="text-sm text-gray-400 mb-1">
+                            {formatDate(date)}
                           </p>
-                          <p className="text-sm text-gray-500">
-                            {item.description}
-                          </p>
+                          <div className="flex items-center">
+                            {mood && (
+                              <div
+                                className={classNames(
+                                  "w-5 h-5 rounded-full flex items-center justify-center mr-2",
+                                  mood.bgColor
+                                )}
+                              >
+                                <MoodIcon
+                                  className="text-white flex-shrink-0 h-3 w-3"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                            )}
+                            <div className="text-sm font-medium text-gray-700">
+                              {value}
+                            </div>
+                          </div>
                         </div>
-                      </a>
-                    ))}
-                  </div>
-                  <div className="bg-[#65b7e5] p-4">
-                    <Comment />
-                  </div>
+                        <MinusCircleIcon
+                          onClick={() => removeComment(id)}
+                          className="group-hover:text-red-500 text-white cursor-pointer flex-shrink-0 h-5 w-5 ml-auto"
+                          aria-hidden="true"
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
-              </Popover.Panel>
-            </Transition>
-          </>
-        )}
-      </Popover>
-    </div>
-  );
-}
+                <div className="bg-[#65b7e5] p-4">
+                  <AddComment
+                    onPost={addComment}
+                    user={user}
+                    changeUser={changeUser}
+                  />
+                </div>
+              </div>
+            </Popover.Panel>
+          </Transition>
+        </>
+      )}
+    </Popover>
+  </div>
+);
 
-function IconOne() {
-  return (
-    <svg
-      width="48"
-      height="48"
-      viewBox="0 0 48 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect width="48" height="48" rx="8" fill="#FFEDD5" />
-      <path
-        d="M24 11L35.2583 17.5V30.5L24 37L12.7417 30.5V17.5L24 11Z"
-        stroke="#FB923C"
-        strokeWidth="2"
-      />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M16.7417 19.8094V28.1906L24 32.3812L31.2584 28.1906V19.8094L24 15.6188L16.7417 19.8094Z"
-        stroke="#FDBA74"
-        strokeWidth="2"
-      />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M20.7417 22.1196V25.882L24 27.7632L27.2584 25.882V22.1196L24 20.2384L20.7417 22.1196Z"
-        stroke="#FDBA74"
-        strokeWidth="2"
-      />
-    </svg>
-  );
-}
-
-function IconTwo() {
-  return (
-    <svg
-      width="48"
-      height="48"
-      viewBox="0 0 48 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect width="48" height="48" rx="8" fill="#FFEDD5" />
-      <path
-        d="M28.0413 20L23.9998 13L19.9585 20M32.0828 27.0001L36.1242 34H28.0415M19.9585 34H11.8755L15.9171 27"
-        stroke="#FB923C"
-        strokeWidth="2"
-      />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M18.804 30H29.1963L24.0001 21L18.804 30Z"
-        stroke="#FDBA74"
-        strokeWidth="2"
-      />
-    </svg>
-  );
-}
-
-function IconThree() {
-  return (
-    <svg
-      width="48"
-      height="48"
-      viewBox="0 0 48 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect width="48" height="48" rx="8" fill="#FFEDD5" />
-      <rect x="13" y="32" width="2" height="4" fill="#FDBA74" />
-      <rect x="17" y="28" width="2" height="8" fill="#FDBA74" />
-      <rect x="21" y="24" width="2" height="12" fill="#FDBA74" />
-      <rect x="25" y="20" width="2" height="16" fill="#FDBA74" />
-      <rect x="29" y="16" width="2" height="20" fill="#FB923C" />
-      <rect x="33" y="12" width="2" height="24" fill="#FB923C" />
-    </svg>
-  );
-}
+export default Chat;
