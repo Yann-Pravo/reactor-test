@@ -1,3 +1,35 @@
+# App overview
+<img width="850" alt="Screenshot 2023-01-03 at 16 52 56" src="https://user-images.githubusercontent.com/625291/210392929-85116c1e-b329-4fb9-b354-06a5a80125b6.png">
+
+
+
+
+# App functionnalities
+
+You can see the comments and add one by clicking on this icon.
+
+<img width="82" alt="Screenshot 2023-01-03 at 16 32 23" src="https://user-images.githubusercontent.com/625291/210389970-2b5fc364-2bd7-4b18-8f1a-3865b86f7637.png">
+
+
+Here you can add a comment, a reaction (optionnal) and change the user by clicking on the user icon
+<img width="790" alt="Screenshot 2023-01-03 at 16 32 42" src="https://user-images.githubusercontent.com/625291/210390115-b73f1e1d-5f1c-468e-ba48-d1de0407cd8b.png">
+
+
+On the top you can list all the comments with the user, his comment, the date and the reaction of the comment
+<img width="776" alt="Screenshot 2023-01-03 at 16 34 23" src="https://user-images.githubusercontent.com/625291/210392173-dbb6df83-26bd-4b98-8a98-a551352f55ac.png">
+
+
+You can also remove any comment by hovering it and click on the remove button
+<img width="749" alt="Screenshot 2023-01-03 at 16 34 33" src="https://user-images.githubusercontent.com/625291/210392302-667ffe71-f5ad-4469-9e23-24e6a16ed1b2.png">
+
+
+You see the number of comments on the chat icon
+
+<img width="63" alt="Screenshot 2023-01-03 at 16 34 40" src="https://user-images.githubusercontent.com/625291/210392393-11957e1a-42f9-47ab-9f17-618f3b6537a0.png">
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
