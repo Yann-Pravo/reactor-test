@@ -2,6 +2,7 @@ import React from "react";
 import i18n, { t } from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "./translations/en";
+import Main from "./containers/Main";
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -17,7 +18,9 @@ i18n.use(initReactI18next).init({
 });
 
 const App: React.FC = () => (
-  <div className="flex h-full w-full justify-center">{t("test")}</div>
+  <div className="flex h-full w-full items-center flex-col">
+    <Main />
+  </div>
 );
 
 export default App;
