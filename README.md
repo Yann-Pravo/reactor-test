@@ -29,6 +29,10 @@ You see the number of comments on the chat icon
 
 
 
+# Data
+Since we don't have any API, all the data is stored in the local storage of the browser
+
+
 
 # Some things left to do
 - Add tests
